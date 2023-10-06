@@ -16,6 +16,7 @@ builder.Services.AddTransient<IAddHome, HomeBuilder>();
 builder.Services.AddTransient<IRemoveHome, HomeBuilder>();
 builder.Services.AddTransient<IGetHome, HomeBuilder>();
 builder.Services.AddTransient<IUpdateHome, HomeBuilder>();
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {
     options.LoginPath = "/login";
@@ -25,6 +26,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 AuthorizationPolicyBuilder policyBuilder = new AuthorizationPolicyBuilder();
 policyBuilder.RequireClaim("access-level", "admin");
 AuthorizationOptions options = new AuthorizationOptions();
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminAccess", policyBuilder.Build());
