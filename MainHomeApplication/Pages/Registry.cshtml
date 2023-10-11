@@ -1,0 +1,25 @@
+﻿@page
+@model MainHomeApplication.Pages.RegistryModel
+@{
+}
+<form method="post" enctype="multipart/form-data">
+    <div class="container">
+        <div class="column">
+            <label>Введите адрес эл. почты: </label>
+            <label>Введите пароль: </label>
+            <label>Введите пароль еще раз: </label>
+            <label>Введите номер телефона: </label>
+            <label>Укажите Ваш гендерный тип: </label>
+
+
+        </div>
+        <div class="column">
+            <input type="text" name="email" />
+            <input type="text" name="password" />
+            <input type="text" name="password_1" />
+            <input type="text" name="phoneNumber" />
+            <input type="text" name="gender" />
+        </div>
+        <input idd="reg_button" type="submit" value="Регистрация" />
+    </div>
+</form>
