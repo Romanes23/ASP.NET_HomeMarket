@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MainHomeApplication.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MainHomeApplication.Pages
 {
     public class IndexModel : PageModel
     {
+        public List<Home> allHomes;
         private readonly ILogger<IndexModel> _logger;
 
         public IndexModel(ILogger<IndexModel> logger)
@@ -12,9 +15,9 @@ namespace MainHomeApplication.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        async public void OnGet([FromServices] ApplicationContext context)
         {
-
+            allHomes = context.Homes.AsNoTracking().ToList();
         }
     }
 }

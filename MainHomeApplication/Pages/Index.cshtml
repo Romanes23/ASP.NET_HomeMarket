@@ -1,5 +1,8 @@
 ﻿@page
 @inject IGetHomeImagePath HomePathGenerator;
+
+@model MainHomeApplication.Pages.IndexModel;
+
 @using System.Security.Claims;
 <h1>Home Market</h1>
 <p>
@@ -18,7 +21,7 @@
 <a asp-page="CreateHome">Добавить дом</a><br />
 <a asp-page="AdminPanel">Панель управления</a>
 <div class="homes-grid">
-    @foreach (Home home in Home.allHomes)
+    @foreach (Home home in Model.allHomes)
     {     
         <div class="home-card">
             <p>Адрес: @home.address</p>

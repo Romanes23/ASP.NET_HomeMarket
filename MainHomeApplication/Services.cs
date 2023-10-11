@@ -27,12 +27,20 @@ namespace MainHomeApplication
         public string GetImagePath(Home home);
     }
 
-    class HomePathGenerator: IGetHomeImagePath
+    class HomePathGenerator : IGetHomeImagePath
     {
         public string GetImagePath(Home home)
         {
-            return $"images/home_{home.id}.jpg";
+            return $"images/home_{home.Id}.jpg";
         }
+    }
+    public interface IHomeDataProvider
+    {
+        public Home getHome(int id);
+        public List<Home> getAllHomes();
+        public Home updateHome(Home home);
+        public void deleteHome(Home home);
+        public Home createHome(Home home);
     }
 
 }

@@ -2,20 +2,31 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MainHomeApplication;
 using Microsoft.AspNetCore.Authorization;
+using MainHomeApplication.Models;
 
 namespace MainHomeApplication.Pages
 {
-    [Authorize]
+    //[Authorize]
     public class CreateHomeModel : PageModel
     {
+        ApplicationContext context;
+        [BindProperty]
+        public Home NewHome { get; set; } = new();
+
+        [BindProperty]
+        public IFormFile? file { get; set; }
+        public CreateHomeModel(ApplicationContext context)
+        {
+            this.context = context;
+        }
         public void OnGet()
         {
         }
-        public IActionResult OnPost([FromServices] IGetHomeIndex idService, [FromServices] IAddHome addHomeService,[FromServices] IGetHomeImagePath imagePath, string ownerName, string address, IFormFile file) {
-            Home home = new Home(idService.Index(), address, ownerName);
-            addHomeService.AddHome(home);
-            FileStream stream = new FileStream("wwwroot/"+imagePath.GetImagePath(home), FileMode.Create);
-            file.CopyTo(stream);
+        async public Task<IActionResult> OnPost([FromServices] IGetHomeIndex idService,[FromServices] IGetHomeImagePath imagePath) {
+            await this.context.Homes.AddAsync(NewHome);
+            FileStream stream = new FileStream("wwwroot/"+imagePath.GetImagePath(NewHome), FileMode.Create);
+            await file.CopyToAsync(stream);
+            await this.context.SaveChangesAsync();
             return RedirectToPage("Index");
         }
     }

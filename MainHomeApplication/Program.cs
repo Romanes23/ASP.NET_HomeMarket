@@ -1,26 +1,25 @@
 using MainHomeApplication;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.AccessControl;
+
+using MainHomeApplication.Models;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+string connection = builder.Configuration.GetConnectionString("DefaultConnection");
+Console.WriteLine(connection);
 
 // Add services to the container.
+builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IGetHomeIndex, HomeIndexGenerator>();
 builder.Services.AddTransient<IGetHomeImagePath, HomePathGenerator>();
-
-builder.Services.AddTransient<IAddHome, HomeBuilder>();
-builder.Services.AddTransient<IRemoveHome, HomeBuilder>();
-builder.Services.AddTransient<IGetHome, HomeBuilder>();
-builder.Services.AddTransient<IUpdateHome, HomeBuilder>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {
     options.LoginPath = "/login";
     options.AccessDeniedPath = "/denied";
     });
+
 
 AuthorizationPolicyBuilder policyBuilder = new AuthorizationPolicyBuilder();
 policyBuilder.RequireClaim("access-level", "admin");
@@ -47,6 +46,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
