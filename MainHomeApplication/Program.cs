@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 
 using MainHomeApplication.Models;
 using Microsoft.EntityFrameworkCore;
+using MainHomeApplication.DataProviders;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -12,8 +14,8 @@ Console.WriteLine(connection);
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
 builder.Services.AddRazorPages();
-builder.Services.AddScoped<IGetHomeIndex, HomeIndexGenerator>();
 builder.Services.AddTransient<IGetHomeImagePath, HomePathGenerator>();
+builder.Services.AddTransient<IHomeDataProvider,LocalDBProvider>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {
     options.LoginPath = "/login";
@@ -47,7 +49,12 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-
+app.MapGet("/logout", async (HttpContext context) =>
+{
+    await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+    context.Response.ContentType = "text/html; charset=utf-8";
+    return "Вы успешно вышли <!DOCTYPE html> <html><body><a href=\"index\">Домой</a></body></html>";
+});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

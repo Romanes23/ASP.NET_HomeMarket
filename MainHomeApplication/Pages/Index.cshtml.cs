@@ -15,9 +15,9 @@ namespace MainHomeApplication.Pages
             _logger = logger;
         }
 
-        async public void OnGet([FromServices] ApplicationContext context)
+        async public void OnGet([FromServices] IHomeDataProvider provider)
         {
-            allHomes = context.Homes.AsNoTracking().ToList();
+            allHomes = provider.getAllHomes();
         }
     }
 }

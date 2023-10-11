@@ -36,10 +36,10 @@ namespace MainHomeApplication
     }
     public interface IHomeDataProvider
     {
-        public Home getHome(int id);
+        public Home? getHome(int id);
         public List<Home> getAllHomes();
-        public Home updateHome(Home home);
-        public void deleteHome(Home home);
+        public Home? updateHome(Home home);
+        public void deleteHome(int homeId);
         public Home createHome(Home home);
     }
 

@@ -5,32 +5,51 @@ namespace MainHomeApplication.DataProviders
     public class LocalDBProvider : IHomeDataProvider
     {
         ApplicationContext _context;
-        public LocalDBProvider(ApplicationContext context) {
+        public LocalDBProvider(ApplicationContext context)
+        {
             _context = context;
         }
         Home IHomeDataProvider.createHome(Home home)
         {
-            Home newhome = this._context.Homes.Add(home);
+            this._context.Homes.Add(home);
+            this._context.SaveChanges();
+            return home;
         }
 
-        void IHomeDataProvider.deleteHome(Home home)
+        void IHomeDataProvider.deleteHome(int homeId)
         {
-            throw new NotImplementedException();
+            Home? dbHome =  this._context.Homes.Find(homeId);
+            if (dbHome == null)
+            {
+                return;
+            }
+            this._context.Homes.Remove(dbHome);
+            this._context.SaveChanges();
         }
 
         List<Home> IHomeDataProvider.getAllHomes()
         {
-            throw new NotImplementedException();
+            return this._context.Homes.ToList();
         }
 
-        Home IHomeDataProvider.getHome(int id)
+        Home? IHomeDataProvider.getHome(int id)
         {
-            throw new NotImplementedException();
+            return this._context.Homes.Find(id);
         }
 
-        Home IHomeDataProvider.updateHome(Home home)
+        Home? IHomeDataProvider.updateHome(Home home)
         {
-            throw new NotImplementedException();
+            Home? dbHome = this._context.Homes.Find(home.Id);
+            if (dbHome == null) {
+                return null;
+            }
+            else
+            {
+                dbHome.address = home.address;
+                dbHome.ownerName = home.ownerName;
+                this._context.SaveChanges();
+                return dbHome;
+            }
         }
     }
 }
