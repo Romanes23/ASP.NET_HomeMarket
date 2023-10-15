@@ -15,7 +15,7 @@ namespace MainHomeApplication.Pages
             _logger = logger;
         }
 
-        async public void OnGet([FromServices] IHomeDataProvider provider)
+        async public void OnGet([FromServices] IDataProvider provider)
         {
             allHomes = provider.getAllHomes();
         }

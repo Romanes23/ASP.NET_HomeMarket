@@ -15,7 +15,7 @@ Console.WriteLine(connection);
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
 builder.Services.AddRazorPages();
 builder.Services.AddTransient<IGetHomeImagePath, HomePathGenerator>();
-builder.Services.AddTransient<IHomeDataProvider,LocalDBProvider>();
+builder.Services.AddTransient<IDataProvider,LocalDBProvider>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {
     options.LoginPath = "/login";
